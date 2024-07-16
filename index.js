@@ -2,16 +2,9 @@ const http = require('http')
 const fs = require('fs/promises');
 const url = require('node:url');
 
-function servePage(err, data) {
-    if (err) {
-        getErrorPage()
-        res.write
-    }
-}
-
 
 http.createServer( async function (req, res) {
-    const myURL = new URL(req.url, "http://localhost:8080/");
+    const myURL = new URL(req.url, req.headers.host);
     const filename = "." + myURL.pathname + ".html"
     
 
