@@ -4,7 +4,7 @@ const url = require('node:url');
 
 
 http.createServer( async function (req, res) {
-    const myURL = new URL(req.url, req.headers.host);
+    const myURL = new URL(req.url, "http://" + req.headers.host);
     const filename = "." + myURL.pathname + ".html"
     
 
