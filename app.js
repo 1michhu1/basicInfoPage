@@ -1,34 +1,29 @@
 const express = require('express')
-const fs = require('fs/promises');
-let app = express()
+const path = require("node:path");
+const assetsPath = path.join(__dirname, "public");
+
+const app = express()
+app.use(express.static(assetsPath));
 
 
-app.engine('html', require('ejs').renderFile)
+const links = [
+    { href: "/", text: "Home" },
+    { href: "about", text: "About" },
+  ];
 
-async function getView(req, res) {
-    let filename
-    if (req.url === '/') {
-        filename = "./index.html"
-    } else {    
-        filename = "./" + req.url + ".html"
-    }
-
-    try {
-        const content = await fs.readFile(filename)
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(content)
-
-    } catch(err) {
-        const content = await fs.readFile("./404.html")
-        res.writeHead(400, {'Content-Type': 'text/html'});
-        res.write(content)
-
-    }
-    res.end()
-}
-
-app.get("*", getView)
+const users = ["Rose", "Cake", "Biff"];
 
 
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+    res.render("index", { message: "EJS rocks!", links:links, users:users });
+  });
+
+app.get("/about", (req, res) => {
+    res.render("about", { message: "yep it's me!!!", links:links, users:users });
+
+})
 
 app.listen(8080)
